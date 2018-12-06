@@ -1,4 +1,6 @@
-﻿using System.Xml.XPath;
+﻿using System;
+using System.ComponentModel;
+using System.Xml.XPath;
 using System.Reflection;
 using Newtonsoft.Json.Serialization;
 using Swashbuckle.AspNetCore.Swagger;
@@ -60,7 +62,23 @@ namespace Swashbuckle.AspNetCore.SwaggerGen
 
             var exampleNode = memberNode.SelectSingleNode(ExampleXPath);
             if (exampleNode != null)
-                propertySchema.Example = XmlCommentsTextHelper.Humanize(exampleNode.InnerXml);
+            {
+                var exampleString = XmlCommentsTextHelper.Humanize(exampleNode.InnerXml);
+                var memberType = (memberInfo.MemberType & MemberTypes.Field) != 0 ? ((FieldInfo) memberInfo).FieldType : ((PropertyInfo) memberInfo).PropertyType;
+                propertySchema.Example = ConvertToType(exampleString, memberType);
+            }
+        }
+
+        private static object ConvertToType(string value, Type type)
+        {
+            try
+            {
+                return TypeDescriptor.GetConverter(type).ConvertFrom(value);
+            }
+            catch (Exception)
+            {
+                return value;
+            }
         }
     }
 }

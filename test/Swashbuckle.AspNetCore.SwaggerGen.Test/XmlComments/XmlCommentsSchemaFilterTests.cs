@@ -56,8 +56,15 @@ namespace Swashbuckle.AspNetCore.SwaggerGen.Test
 
         [Theory]
         [InlineData(typeof(XmlAnnotatedType), "Property", "property example")]
-        [InlineData(typeof(XmlAnnotatedType), "Field", "field example")]
         [InlineData(typeof(XmlAnnotatedSubType), "Property", "property example")]
+        [InlineData(typeof(XmlAnnotatedType), "Field", "field example")]
+        [InlineData(typeof(XmlAnnotatedType), "IntProperty", 10)]
+        [InlineData(typeof(XmlAnnotatedType), "LongProperty", 4294967295L)]
+        [InlineData(typeof(XmlAnnotatedType), "DoubleProperty", 1.25)]
+        [InlineData(typeof(XmlAnnotatedType), "FloatProperty", 1.2f)]
+        [InlineData(typeof(XmlAnnotatedType), "ByteProperty", (byte)0x10)]
+        [InlineData(typeof(XmlAnnotatedType), "BoolField", true)]
+        [InlineData(typeof(XmlAnnotatedType), "BadExampleIntProperty", "property bad example")]
         public void Apply_SetsPropertyExample_FromPropertyExampleTags(
             Type type,
             string propertyName,
